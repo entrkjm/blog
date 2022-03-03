@@ -13,5 +13,3 @@ order: 4
 Interested in:  
 - Social Data Analysis Using Statistical Methods and Network-based Approaches  
 - Natural Language Processing based on Deep-Learning(With Python)
-
-> Hello! {: .prompt-tip }
