@@ -29,7 +29,7 @@ description: >-                        # used by seo meta and the atom feed
   마케팅 리서치, 데이터 분석 일을 하지만 언젠가 이직할 수도 있고 업계에서 
   몸값도 높일 수 있지 않을까 하는 망상에 포트폴리오를 남기려고 하는 블로그
 
-image: assets/img/asdfd.png
+image: /assets/img/asdfd.png
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'https://entrkjm.github.io/'
