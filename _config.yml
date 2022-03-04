@@ -22,8 +22,7 @@ timezone: Asia/Seoul
 # ↓ --------------------------
 
 title: entrkjm                          # the main title
-image: 
-  path: /assets/img/asdf
+
 tagline: Portfoio Blog   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
