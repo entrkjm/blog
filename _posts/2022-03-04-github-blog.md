@@ -41,7 +41,7 @@ author: entrkjm
 
 문제는 이 3단계 스텝 사이사이에서 발생한다. 
 
-1)에서: 일단 내가 사용하고자 하는 테마는 [**chirpy**](https://chirpy.cotes.page/)이었는데, **이 테마를 그냥 무작정 다운 받아서 설치하면 반드시, 2)에서 반드시 오류를 낳는다.** 
+1)에서: 일단 내가 사용하고자 하는 테마는 [**chirpy**](https://chirpy.cotes.page/)이었는데, **이 테마를 그냥 다운 받아서 설치하면 반드시 2)에서 반드시 오류를 낳는다.** 
 
 그렇기 때문에 제작자분이 Github에 만들어 두신 [**Starter 템플릿**](https://github.com/cotes2020/chirpy-starter)을 활용하여 내 Repository를 만들고, 그걸 내 로컬 저장소로 fork해오는 방식이 먹혔다. (Starter 템플릿 외에, 저 개발자분이 만드신 다른 [**Repository**](https://github.com/cotes2020/jekyll-theme-chirpy)는 뭔가 이슈가 있어서 내 로컬 저장소로 clone해도 잘 작동하지 않는 것 같다.)
 
