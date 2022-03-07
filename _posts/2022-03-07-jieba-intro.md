@@ -1,11 +1,13 @@
 ---
 layout: post
-title: [Python] jieba를 활용하여 중국어 단어 빈도 분석기 만들기 - 1
+title: Python의 jieba를 활용하여 중국어 단어 빈도 분석기 만들기 - 1
 date: 2022-03-07 04:08:00 +/- 0000
 categories: [nlp, jieba]
 tags: [python, nlp, jieba]     
 author: entrkjm
 ---
+
+
 # 파이썬으로 중국어 문서를 분석하기: jieba library 활용
 
   
