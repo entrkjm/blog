@@ -35,8 +35,8 @@ author: entrkjm
 
 예를 들면 '나루토'를 이미지로 검색하고, 검색 결과에서 가장 왼쪽의 이미지를 클릭하면 오른쪽에 검은 배경으로 큰 이미지가 뜹니다. 이 큰 이미지를 다운로드 합니다. 그 다음 검색 결과에서 왼쪽의 이미지를 클릭하고 반복합니다.
 
-![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
-![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
+![나루토 검색 결과](./image-crawler/naruto1.PNG)
+![나루토 검색 결과](./image-crawler/naruto2.PNG)
 
 소스 코드는 아래와 같습니다. 셀레니움을 설치하고 chromedriver를 다운로드 받는 법에 대해서는 생략하였습니다.
 
@@ -100,68 +100,3 @@ def image_downloader(name_list): #name_list: 검색하고자 하는 키워드 �
 
 나루토의 겸색으로 2개의 이미지를 다운로드 받은 결과는 다음과 같습니다.
 
-
-```
-#Result
-
-'县公安局' '交巡警' '大队' '、' '治安' '大队' '、' '国保' '大队' '、' '辖区' '派出所' '及县' '消防' '救援' '大队' '相关' '负责人' '陪同' '检查' '。' 
-
-'县公安局' '公安' '公安局' '交巡警' '巡警' '大队' '、' '治安' '大队' '、' '国' '保' '大队' '、' '辖区' '派出' '派出所' '所及' '县' '消防' '救援' '大队' '相关' '负责' '负责人' '责人' '陪同' '检查' '。'
-```
-
-jieba_cut의 경우 반환형이 'generator'이기 때문에, list를 사용하는 것이 편할 수 있습니다. 그럴 때는 jieba_lcut을 사용하면 됩니다.
-
-jieba_cut 외에도 jieba에는 각기 다른 알고리즘을 활용한 tokenizer나 text-extract method가 있는데요. pseg.cut의 경우 jieba_cut과 마찬가지로 동작하지만, 반환형이 (단어, 품사)의 꼴인 tuple을 원소로 갖는 'list'여서, 단어만 추출하려면 추가적인 작업이 필요합니다.
-
-여기서는 jieba.analyse.extract_tags를 한 번 사용하겠습니다. 이 method는 TF-IDF 알고리즘을 사용하는데요. 이 알고리즘은 전체 문서에서 너무 많이 등장하는 단어는 별 의미가 없다고 간주하여 가중치를 낮추는 방식입니다. 예를 들어 영어의 'the' 같은 단어는 TF-IDF 알고리즘 스코어가 낮게 되겠습니다. 
-
-그런데 TF-IDF를 제대로 사용하려면, 분석하고자 하는 문서의 각 키워드에 대해서 TF-IDF 스코어를 먼저 구해야하는데요. **jieba에서는 사전에 구현된 기본 dictionary와 IDF score가 준비된 상태입니다.** 여기서  jieba.analyse.set_ idf_ path(file_ name) method를 활용하면, 제가 따로 만든 custom corpus에 대해서 IDF 스코어를 구하고, 그것을 바탕으로 TF-IDF를 계산할 수 있습니다. 마찬가지로 [**링크1**](https://developpaper.com/detailed-use-in-chinese-word-segmentation-based-on-jieba-package-in-python/), [**링크2**](https://pythonmana.com/2021/12/202112130117064371.html)를 참조하시면 되겠습니다.
-
-지금은 Tutorial이기 때문에 jieba에서 이미 사전에 준비된 기본 값들을 사용해보도록 하겠습니다.
-```python
-words = jieba.analyse.extract_tags(st, topK = 10) # 상위 10개를 추출
-words
-```
-```
-#result 
-['大队', '国保', '及县', '交巡警', '县公安局', '消防', '陪同', '治安', '辖区', '派出所']
-```
-
----
-
-## Custom-dictionary 활용하기: add_word
-앞서 jieba에서는 사전에 준비된 dictionary와 사전에 학습된 문서 데이터를 바탕으로 한 parameter 값을 갖고 있다고 말씀드렸습니다.
-
-여기에 제가 원하는 다른 단어를 추가-제거하는 것도 가능합니다.
-
-이를테면, 위의 예시를 활용한 아래의 코드에서는 '县公安局' 이 단어가 추가됐다가 빠진 것을 확인하실 수 있습니다.
-```python
-st = '县公安局交巡警大队、治安大队、国保大队、辖区派出所及县消防救援大队相关负责人陪同检查。'
-jieba.del_word('县公安局')
-
-cut1 = jieba.lcut(st, cut_all = False)
-print(cut1)
-
-jieba.add_word('县公安局')
-#jieba.add_word(word, freq=None, tag=None)
-
-cut2 = jieba.lcut(st, cut_all = False)
-print(cut2)
-```
-```
-#result
-['县', '公安局', '交巡警', '大队', '、', '治安', '大队', '、', '国保', '大队', '、', '辖区', '派出所', '及县', '消防', '救援', '大队', '相关', '负责人', '陪同', '检查', '。'] 
-['县公安局', '交巡警', '大队', '、', '治安', '大队', '、', '国保', '大队', '、', '辖区', '派出所', '及县', '消防', '救援', '大队', '相关', '负责人', '陪同', '检查', '。']
-```
-
-아예 텍스트 파일로부터 User_custom_dictionary를 load하는 것도 가능한데요. 
-
-```python
-jieba.load_userdict(file_path) #file_path에 txt파일 입력
-```
-이때 텍스트 파일의 형식은 다음과 같아야 합니다
-```
-단어(띄어쓰기)빈도(띄어쓰기)품사(\n)
-단어(띄어쓰기)....
-```
-이 때 빈도나 품사는 꼭 필수가 아니며, 빈도의 경우 예측기의 성능에 영향을 미치는 관계로 suggest_freq()라는 method를 이용해 구한 freq를 넣어주는 것도 가능합니다.
