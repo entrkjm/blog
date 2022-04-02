@@ -35,8 +35,8 @@ author: entrkjm
 
 예를 들면 '나루토'를 이미지로 검색하고, 검색 결과에서 가장 왼쪽의 이미지를 클릭하면 오른쪽에 검은 배경으로 큰 이미지가 뜹니다. 이 큰 이미지를 다운로드 합니다. 그 다음 검색 결과에서 왼쪽의 이미지를 클릭하고 반복합니다.
 
-![나루토 검색 결과](../assets/img/image-crawler/naruto1.PNG)
-![나루토 검색 결과](../assets/img/image-crawler/naruto2.PNG)
+![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
+![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
 
 소스 코드는 아래와 같습니다. 셀레니움을 설치하고 chromedriver를 다운로드 받는 법에 대해서는 생략하였습니다.
 
@@ -89,15 +89,18 @@ def image_downloader(name_list): #name_list: 검색하고자 하는 키워드 �
             try: 
                 driver.find_elements_by_css_selector('img.rg_i.Q4LuWd')[i].click() #검색 결과로 나온 이미지를 순서대로 클릭
                 time.sleep(1)
-                big_image = driver.find_element_by_css_selector('img.n3VNCb')  #클릭해서 상단에 위치한 
+                big_image = driver.find_element_by_css_selector('img.n3VNCb')  
                 bigImage_url = big_image.get_attribute('src')
-                request.urlretrieve(bigImage_url, '%s/%s'%(name, name) + str(i+1) + ".jpg")
+                request.urlretrieve(bigImage_url, '%s/%s'%(name, name) + str(i+1) + ".jpg") #이미지를 다운로드해서 폴더에 저장
             except:
                 pass
             
     driver.close()
 ```
-결과는 다음과 같습니다. 약간의 차이가 있는게 보이시나요? cut_all을 True로 바꿔주면, tokenizer가 빡세게(?) 쪼갭니다.
+
+나루토의 겸색으로 2개의 이미지를 다운로드 받은 결과는 다음과 같습니다.
+
+
 ```
 #Result
 
