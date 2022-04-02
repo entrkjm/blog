@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 파이썬과 selenium을 이용해 구글에서 이미지 다운로드 자동화하기
-date: 2022-04-03 04:08:00 +/- 0000
+date: 2022-04-02 04:08:00 +/- 0000
 categories: [python, crawling]
 tags: [python, selenium]     
 author: entrkjm
