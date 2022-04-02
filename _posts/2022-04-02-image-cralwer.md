@@ -16,33 +16,86 @@ author: entrkjm
 
 회사에서 브랜드 3000개에 대한 로고 이미지를 다운로드할 일이 있었습니다. 이 일을 전부 제 손으로 하기에는 너무나 무리라는 생각이 들었고, 구글에 검색해서 이미지를 다운로드할 수 있도록 자동화된 프로그램을(구글링을 통해) Selenium으로 만들었습니다.
 
-**jieba는 그 중에서 그나마 영어로 된 문서가 있는, 중국어 tokenizer입니다.** tokenizer에 대해 간단하게 설명하자면, 우리가 쓰는 단어나 문장을 '의미' 단위로 나눠서 컴퓨터에 입력할 수 있는 형태로 만드는 프로그램이라고 보시면 됩니다.
+참고에는 다음 사이트를 활용하였습니다.
 
-jieba에서는 미리 여러 기능이 갖춰져 있기 때문에, 이를 활용해서 중국어 문서를 분석하는 프로그램을 만들었다. 그 전에 간단한 사용법부터 보겠습니다.
+*자세한 내용은 [**여기**](https://goodthings4me.tistory.com/535)를 참조*
 
-*자세한 내용은 [**여기**](https://developpaper.com/detailed-use-in-chinese-word-segmentation-based-on-jieba-package-in-python/)를 참조*
+## 작동 방식
+이 프로그램은 아래와 같은 순서로 작동합니다.
 
-## jieba.cut과 text
-jieba.cut(sentence, cut_all = False)는 sentence를 input parameter로 넣으면 jieba tokenizer를 활용해 문장을 단어로 나누어주는 method입니다.
+1)검색하고자 하는 키워드의 리스트를 입력 받습니다. 
+
+2)입력받은 키워드를 구글에 이미지로 검색합니다.
+
+3)가장 상단(맨 위 가장 왼쪽)에 노출된 이미지를 클릭하고, 클릭시 PC 기준으로 오른쪽에 뜨는 이미지 중 '가장 큰 이미지'를 다운로드 받습니다. 
+
+4)그 다음은 상단에서 그 다음으로 노출된 이미지(맨 위 왼쪽 두번째 이미지)를 클릭하고, 마찬가지로 '가장 큰 이미지'를 다운로드합니다. 키워드 검색시 노출되는 순서에 따라서, 이를 반복하는데요. 이미지를 원하는 숫자만큼 다운로드 받을 수 있습니다.
+
+5)다운로드 받은 이미지를, 키워드 이름으로 만든 폴더에 저장합니다.
+
+예를 들면 '나루토'를 이미지로 검색하고, 검색 결과에서 가장 왼쪽의 이미지를 클릭하면 오른쪽에 검은 배경으로 큰 이미지가 뜹니다. 이 큰 이미지를 다운로드 합니다. 그 다음 검색 결과에서 왼쪽의 이미지를 클릭하고 반복합니다.
+
+![나루토 검색 결과](../assets/img/image-crawler/naruto1.PNG)
+![나루토 검색 결과](../assets/img/image-crawler/naruto2.PNG)
+
+소스 코드는 아래와 같습니다. 셀레니움을 설치하고 chromedriver를 다운로드 받는 법에 대해서는 생략하였습니다.
+
 
 ```python
-import jieba
-import jieba.analyse
-import jieba.posseg as pseg
+from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from urllib import request
+import os
+import time
+import pandas as pd
 
-st = '县公安局交巡警大队、治安大队、国保大队, 辖区派出所及县消防救援大队相关负责人陪同检查。'
+#폴더를 만들기 위한 메서드
+def createFolder(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print ('Error: Creating directory. ' +  directory)
 
-#return type은 generator
-cut_1 = jieba.cut(st, cut_all = True)
-cut_2 = jieba.cut(st, cut_all = False)
 
-for i in cut_1:
-	print('\'%s\''%i, end=' ')
+#이미지 다운로드를 위한 메서드
+def image_downloader(name_list): #name_list: 검색하고자 하는 키워드 목록을 담은 리스트
+    for i in name_list:
+        
+        name = str(i)
+        
+        createFolder(name)
 
-print('\n')
+		#검색 결과가 나오지 않을 수 있기 때문에, try-error를 활용함
+        #검색
+        try: 
+            elem = driver.find_element_by_name('q')  # class='gLFyf gsfi'
+            elem.clear()
+            elem.send_keys(name)
+            elem.send_keys(Keys.RETURN)
+            time.sleep(1)
 
-for j in cut_1:
-	print('\'%s\''%j, end=' ')
+			#검색 결과로 얻은 이미지의 수가 10개가 넘으면 10개만, 10개 미만이면 가능한만큼 다운로드를 시도함
+			if len(driver.find_elements_by_css_selector('img.rg_i.Q4LuWd')) > 10: 
+                num = 10
+
+            else:
+                num = len(driver.find_elements_by_css_selector('img.rg_i.Q4LuWd'))
+                
+        except:
+            continue
+            
+        for i in range(num):
+            try: 
+                driver.find_elements_by_css_selector('img.rg_i.Q4LuWd')[i].click() #검색 결과로 나온 이미지를 순서대로 클릭
+                time.sleep(1)
+                big_image = driver.find_element_by_css_selector('img.n3VNCb')  #클릭해서 상단에 위치한 
+                bigImage_url = big_image.get_attribute('src')
+                request.urlretrieve(bigImage_url, '%s/%s'%(name, name) + str(i+1) + ".jpg")
+            except:
+                pass
+            
+    driver.close()
 ```
 결과는 다음과 같습니다. 약간의 차이가 있는게 보이시나요? cut_all을 True로 바꿔주면, tokenizer가 빡세게(?) 쪼갭니다.
 ```
