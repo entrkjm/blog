@@ -110,7 +110,7 @@ name_list = [] #name_list 지정
 # driver 실행
 driver = webdriver.Chrome(path) #path에 자신의 chromedriver가 있는 위치를 지정 
 driver.get('https://www.google.co.kr/imghp?hl=ko&ogbl') 
-time.sleep(0.5) #페이지 로딩에 걸리는 시간
+time.sleep(0.5) #페이지 로딩에 걸리는 시간	
 
 image_downloader(name_list)
 ```
