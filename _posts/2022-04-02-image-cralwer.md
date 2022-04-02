@@ -35,8 +35,8 @@ author: entrkjm
 
 예를 들면 '나루토'를 이미지로 검색하고, 검색 결과에서 가장 왼쪽의 이미지를 클릭하면 오른쪽에 검은 배경으로 큰 이미지가 뜹니다. 이 큰 이미지를 다운로드 합니다. 그 다음 검색 결과에서 왼쪽의 이미지를 클릭하고 반복합니다.
 
-![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
-![나루토 검색 결과](_posts\image-crawler\naruto1.PNG)
+![나루토 검색 결과](./image-crawler/naruto1.PNG)
+![나루토 검색 결과](./image-crawler/naruto2.PNG)
 
 소스 코드는 아래와 같습니다. 셀레니움을 설치하고 chromedriver를 다운로드 받는 법에 대해서는 생략하였습니다.
 
